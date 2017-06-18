@@ -27,6 +27,9 @@ class Client
     public function __construct($server = '127.0.0.1:2379', $version = 'v3alpha')
     {
         $this->server = rtrim($server);
+        if (strpos($this->server, 'http') !== 0) {
+            $this->server = 'http://' . $this->server;
+        }
         $this->version = trim($version);
 
         $baseUri = sprintf('%s/%s/', $this->server, $this->version);
