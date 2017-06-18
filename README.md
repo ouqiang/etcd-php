@@ -28,7 +28,7 @@ require 'vendor/autoload.php';
 
 /*********** kv api ***********/
 
-$client = new \Etcd\Client();
+$client = new \Etcd\Client('http://127.0.0.1:2379');
 $kv = $client->kv();
 
 // set value
@@ -58,13 +58,13 @@ $lease->grant(3600);
 // grant with ID
 $lease->grant(3600, 7587822882194199413);
 
-// revokes a lease
+// revoke a lease
 $lease->revoke(7587822882194199413);
 
-// keeps the lease alive
+// keep the lease alive
 $lease->keepAlive(7587822882194199413);
 
-// retrieves lease information
+// retrieve lease information
 $lease->timeToLive(7587822882194199413);
 
 ```

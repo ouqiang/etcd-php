@@ -35,7 +35,8 @@ class KV extends Base
             'value' => $value,
         ];
 
-
+        $params = $this->encode($params);
+        $options = $this->encode($options);
         $body = $this->request(self::URI_PUT, $params, $options);
         $body = $this->decodeBodyForFields(
             $body,
@@ -74,7 +75,8 @@ class KV extends Base
         $params = [
             'key' => $key,
         ];
-
+        $params = $this->encode($params);
+        $options = $this->encode($options);
         $body = $this->request(self::URI_RANGE, $params, $options);
         $body = $this->decodeBodyForFields(
             $body,
@@ -103,6 +105,8 @@ class KV extends Base
         $params = [
             'key' => $key,
         ];
+        $params = $this->encode($params);
+        $options = $this->encode($options);
         $body = $this->request(self::URI_DELETE_RANGE, $params, $options);
         $body = $this->decodeBodyForFields(
             $body,

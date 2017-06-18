@@ -33,19 +33,28 @@ class Base {
      * 发送HTTP请求
      *
      * @param  string $uri
-     * @param  array  $params  请求必填参数
+     * @param  array  $params  请求参数
      * @param  array  $options 可选参数
      * @return array|BadResponseException
      */
-    protected function request($uri, array $params, array $options = [])
+    protected function request($uri, array $params = [], array $options = [])
     {
         if ($options) {
             $params = array_merge($params, $options);
         }
-        $data = $this->encodeBody($params);
-        $response = $this->httpClient->request('post', $uri, [
-            'json' => $data,
-        ]);
+        // 没有参数, 设置一个默认参数
+        if (!$params) {
+            $params['php-etcd-client'] = 1;
+        }
+        $data = [
+            'json' => $params,
+        ];
+        $authToken = Token::get();
+        if ($authToken) {
+            $data['headers'] = ['Grpc-Metadata-Token' => $authToken];
+        }
+
+        $response = $this->httpClient->request('post', $uri, $data);
         $content = $response->getBody()->getContents();
 
         $body = json_decode($content, true);
@@ -62,7 +71,7 @@ class Base {
      * @param array $data
      * @return array
      */
-    protected function encodeBody(array $data)
+    protected function encode(array $data)
     {
 
         foreach ($data as $key => $value) {
@@ -74,8 +83,9 @@ class Base {
         return $data;
     }
 
+
     /**
-     * string类型key用base64解码, 需指定解码字段
+     * 指定字段base64解码
      *
      * @param array  $body
      * @param string $bodyKey

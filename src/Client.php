@@ -41,7 +41,6 @@ class Client
         );
     }
 
-
     public function kv()
     {
         return new KV($this->httpClient);
@@ -52,4 +51,8 @@ class Client
         return new Lease($this->httpClient);
     }
 
+    public function auth()
+    {
+        return new Auth($this->httpClient);
+    }
 }
