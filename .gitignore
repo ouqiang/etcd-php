@@ -1,0 +1,10 @@
+
+# phpstorm
+.idea
+
+# composer
+composer.lock
+vendor
+
+# project
+index.php
