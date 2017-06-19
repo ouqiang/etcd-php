@@ -25,46 +25,92 @@ Usage
 ```php
 <?php
 require 'vendor/autoload.php';
+$client = new \Etcd\Client('127.0.0.1:2379');
 
-/*********** kv api ***********/
-
-$client = new \Etcd\Client('http://127.0.0.1:2379');
-$kv = $client->kv();
-
+/*********** kv ***********/
 // set value
-$kv->put('redis', '127.0.0.1:6379');
+$client->put('redis', '127.0.0.1:6379');
 
 // set value and return previous value
-$kv->put('redis', '127.0.0.1:6579', ['prev_kv' => true]);
+$client->put('redis', '127.0.0.1:6579', ['prev_kv' => true]);
 
 // set value with lease
-$kv->put('redis', '127.0.0.1:6579', ['lease' => 7587822882194199413]);
+$client->put('redis', '127.0.0.1:6579', ['lease' => 7587822882194199413]);
 
 // get key value
 $client->get('redis');
 
 // delete key
-$kv->del('redis');
+$client->del('redis');
 
 // compaction
-$kv->compaction(7);
+$client->compaction(7);
 
 
-/************ lease api *****************/
-$lease = $client->lease();
+/************ lease *****************/
 
-$lease->grant(3600);
+$client->grant(3600);
 
 // grant with ID
-$lease->grant(3600, 7587822882194199413);
+$client->grant(3600, 7587822882194199413);
 
 // revoke a lease
-$lease->revoke(7587822882194199413);
+$client->revoke(7587822882194199413);
 
 // keep the lease alive
-$lease->keepAlive(7587822882194199413);
+$client->keepAlive(7587822882194199413);
 
 // retrieve lease information
-$lease->timeToLive(7587822882194199413);
+$client->timeToLive(7587822882194199413);
 
+
+/************ auth role user **************/
+
+// enable authentication
+$client->authEnable();
+
+// disable authentication
+$client->authDisable();
+
+// get auth token
+$client->authenticate('user', 'password');
+
+// add a new role
+$client->addRole('root');
+
+// get detailed role information
+$client->getRole('root');
+
+// delete a specified role
+$client->deleteRole('root');
+
+// get lists of all roles
+$client->roleList();
+
+// add a new user
+$client->addUser('user', 'password');
+
+// get detailed user information
+$client->getUser('root');
+
+// delete a specified user
+$client->deleteUser('root');
+
+// get a list of all users.
+$client->userList();
+
+// change the password of a specified user
+$client->changeUserPassword('user', 'new password');
+
+// grant a role to a specified user
+$client->grantUserRole('user', 'role');
+
+// revoke a role of specified user
+$client->revokeUserRole('user', 'role');
+
+// grant a permission of a specified key or range to a specified role
+$client->grantRolePermission('admin', \Etcd\Client::PERMISSION_READWRITE, 'redis');
+
+// revoke a key or range permission of a specified role
+$client->revokeRolePermission('admin', 'redis');
 ```
