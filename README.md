@@ -14,9 +14,7 @@ Requirements
 Installation
 ------------
 ```shell
-git clone https://github.com/ouqiang/etcd-php
-cd etcd-php
-composer install
+composer require start-point/etcd-php
 ```
 
 Usage
@@ -74,6 +72,12 @@ $client->authDisable();
 
 // get auth token
 $client->authenticate('user', 'password');
+
+// set auth token
+$client->setToken($token);
+
+// clear auth token
+$client->clearToken();
 
 // add a new role
 $client->addRole('root');

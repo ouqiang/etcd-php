@@ -1,12 +1,24 @@
 {
+  "name": "start-point/etcd-php",
+  "type": "library",
+  "description": "PHP client for Etcd v3",
+  "keywords": ["etcdv3", "etcd", "etcd-client", "etcd-php"],
+  "homepage": "https://github.com/ouqiang/etcd-php",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ouqiang",
+      "email": "qingqianludao@gmail.com",
+      "homepage": "https://github.com/ouqiang"
+    }
+  ],
    "require": {
-     "php": ">= 5.5"
-   },
-   "require-dev": {
-     "phpunit/phpunit": "4.5.*",
+     "php": ">= 5.5",
      "guzzlehttp/guzzle": "~6.0"
    },
-
+   "require-dev": {
+     "phpunit/phpunit": "4.5.*"
+   },
    "autoload": {
      "psr-4": {
        "Etcd\\": "src/"

@@ -66,7 +66,7 @@ class Client
     protected $httpClient;
 
     /**
-     * @var bool ÓÑºÃÊä³ö, Ö»·µ»ØËùĞè×Ö¶Î
+     * @var bool å‹å¥½è¾“å‡º, åªè¿”å›æ‰€éœ€å­—æ®µ
      */
     protected $pretty = false;
 
@@ -116,7 +116,7 @@ class Client
      *
      * @param string $key
      * @param string $value
-     * @param array  $options ¿ÉÑ¡²ÎÊı
+     * @param array  $options å¯é€‰å‚æ•°
      *        int64  lease
      *        bool   prev_kv
      *        bool   ignore_value
@@ -641,11 +641,11 @@ class Client
     // endregion auth
 
     /**
-     * ·¢ËÍHTTPÇëÇó
+     * å‘é€HTTPè¯·æ±‚
      *
      * @param  string $uri
-     * @param  array  $params  ÇëÇó²ÎÊı
-     * @param  array  $options ¿ÉÑ¡²ÎÊı
+     * @param  array  $params  è¯·æ±‚å‚æ•°
+     * @param  array  $options å¯é€‰å‚æ•°
      * @return array|BadResponseException
      */
     protected function request($uri, array $params = [], array $options = [])
@@ -653,7 +653,7 @@ class Client
         if ($options) {
             $params = array_merge($params, $options);
         }
-        // Ã»ÓĞ²ÎÊı, ÉèÖÃÒ»¸öÄ¬ÈÏ²ÎÊı
+        // æ²¡æœ‰å‚æ•°, è®¾ç½®ä¸€ä¸ªé»˜è®¤å‚æ•°
         if (!$params) {
             $params['php-etcd-client'] = 1;
         }
@@ -676,7 +676,7 @@ class Client
     }
 
     /**
-     * stringÀàĞÍkeyÓÃbase64±àÂë
+     * stringç±»å‹keyç”¨base64ç¼–ç 
      *
      * @param array $data
      * @return array
@@ -694,11 +694,11 @@ class Client
     }
 
     /**
-     * Ö¸¶¨×Ö¶Îbase64½âÂë
+     * æŒ‡å®šå­—æ®µbase64è§£ç 
      *
      * @param array  $body
      * @param string $bodyKey
-     * @param array  $fields  ĞèÒª½âÂëµÄ×Ö¶Î
+     * @param array  $fields  éœ€è¦è§£ç çš„å­—æ®µ
      * @return array
      */
     protected function decodeBodyForFields(array $body, $bodyKey, array $fields)
