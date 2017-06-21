@@ -8,3 +8,5 @@ vendor
 
 # project
 index.php
+package.json
+node_modules

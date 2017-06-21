@@ -187,6 +187,37 @@ class Client
     }
 
     /**
+     * get all keys
+     *
+     * @return array|\GuzzleHttp\Exception\BadResponseException
+     */
+    public function getAllKeys()
+    {
+        return $this->get("\0", ['range_end' => "\0"]);
+    }
+
+    /**
+     * get all keys with prefix
+     *
+     * @param  string $prefix
+     * @return array|\GuzzleHttp\Exception\BadResponseException
+     */
+    public function getKeysWithPrefix($prefix)
+    {
+        $prefix = trim($prefix);
+        if (!$prefix) {
+            return [];
+        }
+        $lastIndex = strlen($prefix) - 1;
+        $lastChar = $prefix[$lastIndex];
+        $nextAsciiCode = ord($lastChar) + 1;
+        $rangeEnd = $prefix;
+        $rangeEnd[$lastIndex] = chr($nextAsciiCode);
+
+        return $this->get($prefix, ['range_end' => $rangeEnd]);
+    }
+
+    /**
      * Removes the specified key or range of keys
      *
      * @param string $key

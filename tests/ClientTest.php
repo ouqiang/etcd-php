@@ -36,6 +36,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $body[$this->key]);
     }
 
+    public function testGetAllKeys()
+    {
+        $body = $this->client->getAllKeys();
+        $this->assertNotEmpty($body);
+    }
+
+    public function testGetKeysWithPrefix()
+    {
+        $body = $this->client->getKeysWithPrefix('/');
+        $this->assertNotEmpty($body);
+    }
+
     public function testDeleteRange()
     {
         $this->client->del($this->key);

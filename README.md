@@ -38,6 +38,12 @@ $client->put('redis', '127.0.0.1:6579', ['lease' => 7587822882194199413]);
 // get key value
 $client->get('redis');
 
+// get all keys
+$client->getAllKeys();
+
+// get keys with prefix
+$client->getKeysWithPrefix('/v3/service/user/');
+
 // delete key
 $client->del('redis');
 
