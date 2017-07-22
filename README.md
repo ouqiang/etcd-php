@@ -2,6 +2,10 @@
 PHP client for Etcd v3
 
 [![Build Status](https://travis-ci.org/ouqiang/etcd-php.png)](https://travis-ci.org/ouqiang/etcd-php)
+[![Latest Stable Version](https://poser.pugx.org/start-point/etcd-php/v/stable.png)](https://packagist.org/packages/start-point/etcd-php)
+[![Total Downloads](https://poser.pugx.org/start-point/etcd-php/downloads.png)](https://packagist.org/packages/ouqiang/etcd-php)
+[![License](https://poser.pugx.org/start-point/etcd-php/license.png)](https://packagist.org/packages/start-point/etcd-php)
+
 
 [documentation](https://github.com/ouqiang/etcd-php/wiki)
 
