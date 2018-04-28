@@ -7,6 +7,7 @@
 namespace Etcd;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\BadResponseException;
 
 class Client
 {
@@ -51,6 +52,8 @@ class Client
     const PERMISSION_WRITE = 1;
     const PERMISSION_READWRITE = 2;
 
+    const DEFAULT_HTTP_TIMEOUT = 30;
+
     /**
      * @var string host:port
      */
@@ -61,12 +64,12 @@ class Client
     protected $version;
 
     /**
-     * @var HttpClient
+     * @var array
      */
-    protected $httpClient;
+    protected $httpOptions;
 
     /**
-     * @var bool 友好输出, 只返回所需字段
+     * @var bool
      */
     protected $pretty = false;
 
@@ -77,19 +80,16 @@ class Client
 
     public function __construct($server = '127.0.0.1:2379', $version = 'v3alpha')
     {
-        $this->server = rtrim($server);
+        $this->server = rtrim($server, "/");
         if (strpos($this->server, 'http') !== 0) {
             $this->server = 'http://' . $this->server;
         }
         $this->version = trim($version);
+    }
 
-        $baseUri = sprintf('%s/%s/', $this->server, $this->version);
-        $this->httpClient = new HttpClient(
-            [
-                'base_uri' => $baseUri,
-                'timeout'  => 30,
-            ]
-        );
+    public function setHttpOptions(array $options)
+    {
+        $this->httpOptions = $options;
     }
 
     public function setPretty($enabled)
@@ -252,7 +252,7 @@ class Client
      * The key-value\nstore should be periodically compacted
      * or the event history will continue to grow\nindefinitely.
      *
-     * @param int64 $revision
+     * @param int $revision
      *
      * @param bool|false $physical
      *
@@ -280,8 +280,8 @@ class Client
      * will be expired and\ndeleted if the lease expires.
      * Each expired key generates a delete event in the event history.",
      *
-     * @param int64 $ttl  TTL is the advisory time-to-live in seconds.
-     * @param int64 $id   ID is the requested ID for the lease.
+     * @param int $ttl  TTL is the advisory time-to-live in seconds.
+     * @param int $id   ID is the requested ID for the lease.
      *                    If ID is set to 0, the lessor chooses an ID.
      * @return array|\GuzzleHttp\Exception\BadResponseException
      */
@@ -301,7 +301,7 @@ class Client
     /**
      * revokes a lease. All keys attached to the lease will expire and be deleted.
      *
-     * @param  int64 $id ID is the lease ID to revoke. When the ID is revoked,
+     * @param int  $id ID is the lease ID to revoke. When the ID is revoked,
      *               all associated keys will be deleted.
      * @return array|\GuzzleHttp\Exception\BadResponseException
      */
@@ -321,7 +321,7 @@ class Client
      * from the client\nto the server and streaming keep alive responses
      * from the server to the client.
      *
-     * @param int64 $id  ID is the lease ID for the lease to keep alive.
+     * @param int $id  ID is the lease ID for the lease to keep alive.
      * @return array|\GuzzleHttp\Exception\BadResponseException
      */
     public function keepAlive($id)
@@ -345,9 +345,10 @@ class Client
     /**
      * retrieves lease information.
      *
-     * @param int64 $id ID is the lease ID for the lease.
+     * @param int $id ID is the lease ID for the lease.
      * @param bool|false $keys
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @tthrows BadResponseException
      */
     public function timeToLive($id, $keys = false)
     {
@@ -615,6 +616,8 @@ class Client
      * @param string      $role
      * @param string      $key
      * @param string|null $rangeEnd
+     * @return array
+     * @throws BadResponseException
      */
     public function revokeRolePermission($role, $key, $rangeEnd = null)
     {
@@ -636,7 +639,8 @@ class Client
      *
      * @param  string $user
      * @param  string $role
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws BadResponseException
      */
     public function grantUserRole($user, $role)
     {
@@ -677,7 +681,8 @@ class Client
      * @param  string $uri
      * @param  array  $params  请求参数
      * @param  array  $options 可选参数
-     * @return array|BadResponseException
+     * @return array
+     * @throws BadResponseException
      */
     protected function request($uri, array $params = [], array $options = [])
     {
@@ -695,7 +700,7 @@ class Client
             $data['headers'] = ['Grpc-Metadata-Token' => $this->token];
         }
 
-        $response = $this->httpClient->request('post', $uri, $data);
+        $response = $this->getHttpClient()->request('post', $uri, $data);
         $content = $response->getBody()->getContents();
 
         $body = json_decode($content, true);
@@ -704,6 +709,22 @@ class Client
         }
 
         return $body;
+    }
+
+    protected function getHttpClient()
+    {
+        static $httpClient = null;
+        if ($httpClient !== null) {
+            return $httpClient;
+        }
+        $baseUri = sprintf('%s/%s/', $this->server, $this->version);
+        $this->httpOptions['base_uri'] = $baseUri;
+        if (!array_key_exists($this->httpOptions, 'timeout')) {
+            $this->httpOptions['timeout'] = self::DEFAULT_HTTP_TIMEOUT;
+        }
+        $httpClient = new HttpClient($this->httpOptions);
+
+        return $httpClient;
     }
 
     /**
