@@ -76,7 +76,7 @@ class Client
      */
     protected $token = null;
 
-    public function __construct($servers = '127.0.0.1:2379', $version = 'v3alpha')
+    public function __construct($servers = '127.0.0.1:2379', $version = 'v3alpha', $timeout = 5)
     {
         $servers = is_string($servers) ? [$servers] : $servers;
         if (!is_array($servers)) {
@@ -84,7 +84,7 @@ class Client
         }
 
         foreach ($servers as $server) {
-            $connected = $this->connect($server, $version);
+            $connected = $this->connect($server, $version, $timeout);
             if ($connected) {
                 return;
             }
@@ -92,7 +92,7 @@ class Client
         throw new ConnectionException('No etcd server can connect.');
     }
 
-    public function connect($server, $version)
+    public function connect($server, $version, $timeout)
     {
         $this->server = rtrim($server);
         if (strpos($this->server, 'http') !== 0) {
@@ -104,7 +104,7 @@ class Client
         $this->httpClient = new HttpClient(
             [
                 'base_uri' => $baseUri,
-                'timeout'  => 30,
+                'timeout'  => $timeout,
             ]
         );
 
