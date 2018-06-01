@@ -7,6 +7,7 @@
 namespace Etcd;
 
 use GuzzleHttp\Client as HttpClient;
+use Etcd\Exceptions\ConnectionException;
 
 class Client
 {
@@ -75,7 +76,23 @@ class Client
      */
     protected $token = null;
 
-    public function __construct($server = '127.0.0.1:2379', $version = 'v3alpha')
+    public function __construct($servers = '127.0.0.1:2379', $version = 'v3alpha')
+    {
+        $servers = is_string($servers) ? [$servers] : $servers;
+        if (!is_array($servers)) {
+            throw new ConnectionException('Server Hosts format is invalid.');
+        }
+
+        foreach ($servers as $server) {
+            $connected = $this->connect($server, $version);
+            if ($connected) {
+                return;
+            }
+        }
+        throw new ConnectionException('No etcd server can connect.');
+    }
+
+    public function connect($server, $version)
     {
         $this->server = rtrim($server);
         if (strpos($this->server, 'http') !== 0) {
@@ -90,6 +107,13 @@ class Client
                 'timeout'  => 30,
             ]
         );
+
+        try {
+            $this->userList();
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     public function setPretty($enabled)
@@ -773,3 +797,5 @@ class Client
         return $map;
     }
 }
+
+$client = new Client('47.91.208.228:2379');
