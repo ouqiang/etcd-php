@@ -121,7 +121,8 @@ class Client
      *        bool   prev_kv
      *        bool   ignore_value
      *        bool   ignore_lease
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function put($key, $value, array $options = [])
     {
@@ -163,7 +164,8 @@ class Client
      *         int64  max_mod_revision
      *         int64  min_create_revision
      *         int64  max_create_revision
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function get($key, array $options = [])
     {
@@ -189,7 +191,8 @@ class Client
     /**
      * get all keys
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function getAllKeys()
     {
@@ -200,7 +203,8 @@ class Client
      * get all keys with prefix
      *
      * @param  string $prefix
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function getKeysWithPrefix($prefix)
     {
@@ -224,7 +228,8 @@ class Client
      * @param array  $options
      *        string range_end
      *        bool   prev_kv
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function del($key, array $options = [])
     {
@@ -256,7 +261,8 @@ class Client
      *
      * @param bool|false $physical
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function compaction($revision, $physical = false)
     {
@@ -283,7 +289,8 @@ class Client
      * @param int $ttl  TTL is the advisory time-to-live in seconds.
      * @param int $id   ID is the requested ID for the lease.
      *                    If ID is set to 0, the lessor chooses an ID.
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function grant($ttl, $id = 0)
     {
@@ -303,7 +310,8 @@ class Client
      *
      * @param int  $id ID is the lease ID to revoke. When the ID is revoked,
      *               all associated keys will be deleted.
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function revoke($id)
     {
@@ -322,7 +330,8 @@ class Client
      * from the server to the client.
      *
      * @param int $id  ID is the lease ID for the lease to keep alive.
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function keepAlive($id)
     {
@@ -348,7 +357,7 @@ class Client
      * @param int $id ID is the lease ID for the lease.
      * @param bool|false $keys
      * @return array
-     * @tthrows BadResponseException
+     * @throws BadResponseException
      */
     public function timeToLive($id, $keys = false)
     {
@@ -375,7 +384,8 @@ class Client
     /**
      * enable authentication
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function authEnable()
     {
@@ -388,7 +398,8 @@ class Client
     /**
      * disable authentication
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function authDisable()
     {
@@ -401,7 +412,8 @@ class Client
     /**
      * @param  string $user
      * @param  string $password
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function authenticate($user, $password)
     {
@@ -422,7 +434,8 @@ class Client
      * add a new role.
      *
      * @param string $name
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function addRole($name)
     {
@@ -439,7 +452,8 @@ class Client
      * get detailed role information.
      *
      * @param  string $role
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function getRole($role)
     {
@@ -464,7 +478,8 @@ class Client
      * delete a specified role.
      *
      * @param  string $role
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function deleteRole($role)
     {
@@ -480,7 +495,8 @@ class Client
     /**
      * get lists of all roles
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function roleList()
     {
@@ -498,7 +514,8 @@ class Client
      *
      * @param string $user
      * @param string $password
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function addUser($user, $password)
     {
@@ -516,7 +533,8 @@ class Client
      * get detailed user information
      *
      * @param  string $user
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function getUser($user)
     {
@@ -536,7 +554,8 @@ class Client
      * delete a specified user
      *
      * @param string $user
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function deleteUser($user)
     {
@@ -552,7 +571,8 @@ class Client
     /**
      * get a list of all users.
      *
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function userList()
     {
@@ -569,7 +589,8 @@ class Client
      *
      * @param string $user
      * @param string $password
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function changeUserPassword($user, $password)
     {
@@ -590,7 +611,8 @@ class Client
      * @param int         $permType
      * @param string      $key
      * @param string|null $rangeEnd
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function grantRolePermission($role, $permType, $key, $rangeEnd = null)
     {
@@ -659,7 +681,8 @@ class Client
      *
      * @param string $user
      * @param string $role
-     * @return array|\GuzzleHttp\Exception\BadResponseException
+     * @return array
+     * @throws \GuzzleHttp\Exception\BadResponseException
      */
     public function revokeUserRole($user, $role)
     {
