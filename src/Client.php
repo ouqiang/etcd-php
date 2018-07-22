@@ -742,7 +742,7 @@ class Client
         }
         $baseUri = sprintf('%s/%s/', $this->server, $this->version);
         $this->httpOptions['base_uri'] = $baseUri;
-        if (!array_key_exists($this->httpOptions, 'timeout')) {
+        if (!array_key_exists('timeout', $this->httpOptions)) {
             $this->httpOptions['timeout'] = self::DEFAULT_HTTP_TIMEOUT;
         }
         $httpClient = new HttpClient($this->httpOptions);
