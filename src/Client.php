@@ -132,7 +132,6 @@ class Client
         ];
 
         $params = $this->encode($params);
-//        $options = $this->encode($options);
         $body = $this->request(self::URI_PUT, $params, $options);
         $body = $this->decodeBodyForFields(
             $body,
